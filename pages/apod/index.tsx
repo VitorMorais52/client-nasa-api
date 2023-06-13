@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { GetServerSideProps } from "next";
-interface IApod {
+interface IDataProps {
   copyright: string;
   date: string;
   explanation: string;
@@ -12,12 +12,11 @@ interface IApod {
 }
 
 interface IApodProps {
-  data: IApod;
+  data: IDataProps;
 }
 
 export default function apod({ data }: IApodProps) {
   const { title, explanation, date, copyright } = data;
-  console.info("data", data);
   return (
     <div className="flex bg-black w-full h-screen text-gray-300">
       <img
@@ -39,7 +38,7 @@ export default function apod({ data }: IApodProps) {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const response = await fetch(
-    "https://api.nasa.gov/planetary/apod?concept_tags=true&api_key=5zBy35fWpWlnOfqLYPRDezQTqeUJh4ZOH3ORppyr"
+    `https://api.nasa.gov/planetary/apod?concept_tags=true&api_key=${process.env.APOD_API_KEY}`
   );
   const data = await response.json();
 
